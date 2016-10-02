@@ -90,3 +90,5 @@ jspm_packages
 *.iml
 out
 gen
+/tou/app/*.js
+/tou/app/*.js.map
