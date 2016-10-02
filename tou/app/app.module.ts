@@ -10,6 +10,7 @@ import {DashboardComponent} from "./dashboard.component";
 import {HttpModule} from "@angular/http";
 import {InMemoryWebApiModule} from "angular-in-memory-web-api";
 import {InMemoryDataService} from "./in-memory-data.service";
+import './rxjs-extensions';
 @NgModule({
     imports: [
         BrowserModule,
