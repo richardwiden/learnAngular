@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {HeroSearchService} from "./hero-search.service";
 import {Router} from "@angular/router";
-import {Subject, Observable} from "rxjs";
+import {Observable} from "rxjs/Observable";
+import {Subject} from "rxjs/Subject";
 import {Hero} from "./hero";
 
 @Component({
@@ -29,7 +30,7 @@ export class HeroSearchComponent implements OnInit {
             .distinctUntilChanged()
             .switchMap(term=>term ? this.heroSearchService.search(term) : Observable.of<Hero[]>([]))
             .catch(error=> {
-                console.log(error)
+                console.log(error);
                 return Observable.of<Hero[]>([]);
             })
     }
