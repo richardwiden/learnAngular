@@ -23,17 +23,18 @@ export class HeroService {
     }
 
     create(name: string): Promise<Hero> {
+        let hero = new Hero();
+        hero.name=name;
+        let obj=Hero.prepareForSearch(hero);
         //noinspection TypeScriptUnresolvedFunction
         return this.af.database.list('/heroes')
-            .push({name: name})
+            .push(obj)
             .once('value');
     }
 
     update(hero: Hero): Promise<void> {
         const url = `${this.heroesUrl}/${hero.$key}`;
-        delete(hero.$key);
-        let obj = JSON.parse(JSON.stringify(hero));
-
+        let obj=Hero.prepareForSearch(hero);
         //noinspection TypeScriptValidateTypes
         return this.af.database.object(url).update(obj);
     }
@@ -41,7 +42,6 @@ export class HeroService {
     delete(key: String): Promise<void> {
         if (!key) return Promise.reject("Empty key");
         const url = `${this.heroesUrl}/${key}`;
-        console.log(url);
         //noinspection TypeScriptUnresolvedFunction
         return this.af.database.object(url).remove()
             .then(()=>null)

@@ -20,21 +20,23 @@ var HeroSearchComponent = (function () {
         this.searchTerms = new Subject_1.Subject();
     }
     HeroSearchComponent.prototype.search = function (term) {
-        this.searchTerms.next(term);
+        this.searchTerms.next(term.toLocaleLowerCase());
     };
     HeroSearchComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.heroes = this.searchTerms
             .debounceTime(300)
             .distinctUntilChanged()
-            .switchMap(function (term) { return term ? _this.heroSearchService.search(term) : Observable_1.Observable.of([]); })
+            .switchMap(function (term) { return term ?
+            _this.heroSearchService.search(term) :
+            Observable_1.Observable.of([]); })
             .catch(function (error) {
             console.log(error);
             return Observable_1.Observable.of([]);
         });
     };
     HeroSearchComponent.prototype.gotoDetail = function (hero) {
-        var link = ['/detail', hero.id];
+        var link = ['/detail', hero.$key];
         this.router.navigate(link);
     };
     HeroSearchComponent = __decorate([

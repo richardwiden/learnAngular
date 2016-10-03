@@ -10,19 +10,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
+var angularfire2_1 = require('angularfire2');
 var HeroSearchService = (function () {
-    function HeroSearchService(http) {
+    function HeroSearchService(http, af) {
         this.http = http;
-        this.searchUrl = 'app/heroes';
+        this.af = af;
+        this.searchUrl = '/heroes';
     }
     HeroSearchService.prototype.search = function (term) {
-        return this.http
-            .get(this.searchUrl + "/?name=" + term)
-            .map(function (r) { return r.json().data; });
+        console.log(term);
+        return this.af.database.list(this.searchUrl, {
+            query: {
+                orderByChild: 'name_search',
+                startAt: term,
+                endAt: term + '\uf8ff',
+                limitToFirst: 2
+            }
+        });
     };
     HeroSearchService = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [http_1.Http])
+        __metadata('design:paramtypes', [http_1.Http, angularfire2_1.AngularFire])
     ], HeroSearchService);
     return HeroSearchService;
 }());

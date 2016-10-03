@@ -21,14 +21,16 @@ export class HeroSearchComponent implements OnInit {
     }
 
     search(term: string): void {
-        this.searchTerms.next(term);
+        this.searchTerms.next(term.toLocaleLowerCase());
     }
 
     ngOnInit() {
         this.heroes = this.searchTerms
             .debounceTime(300)
             .distinctUntilChanged()
-            .switchMap(term=>term ? this.heroSearchService.search(term) : Observable.of<Hero[]>([]))
+            .switchMap(term=>term ?
+                this.heroSearchService.search(term) :
+                Observable.of<Hero[]>([]))
             .catch(error=> {
                 console.log(error);
                 return Observable.of<Hero[]>([]);
@@ -36,7 +38,7 @@ export class HeroSearchComponent implements OnInit {
     }
 
     gotoDetail(hero: Hero): void {
-        let link = ['/detail', hero.id];
+        let link = ['/detail', hero.$key];
         this.router.navigate(link);
     }
 
