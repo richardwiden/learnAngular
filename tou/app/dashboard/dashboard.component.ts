@@ -1,8 +1,8 @@
 import {Component, OnInit} from "@angular/core";
-import {HeroService} from "./hero.service";
-import {Hero} from "./hero";
+import {HeroService} from "../hero.service";
+import {Hero} from "../hero";
 import {Router} from "@angular/router";
-import './rxjs-extensions'
+import '../rxjs-extensions'
 @Component({
     moduleId: module.id,
     selector: 'my-dashboard',

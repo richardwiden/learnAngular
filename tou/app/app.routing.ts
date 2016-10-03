@@ -1,7 +1,7 @@
 import {Routes, RouterModule} from "@angular/router";
-import {HeroesComponent} from "./heroes.component";
+import {HeroesComponent} from "./heroes-component/heroes.component";
 import {ModuleWithProviders} from "@angular/core";
-import {DashboardComponent} from "./dashboard.component";
+import {DashboardComponent} from "./dashboard/dashboard.component";
 import {HeroDetailComponent} from "./hero-detail.component";
 const appRoutes: Routes = [{
     path: '',
