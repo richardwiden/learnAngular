@@ -12,7 +12,6 @@ export class HeroSearchService {
     }
 
     search(term: String): Observable<Hero[]> {
-        console.log(term);
         return this.af.database.list(this.searchUrl, {
             query: {
                 orderByChild: 'name_search',

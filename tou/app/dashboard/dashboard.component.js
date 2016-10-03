@@ -21,7 +21,6 @@ var DashboardComponent = (function () {
         var _this = this;
         this.subscription = this.heroService.getHeroes().subscribe(function (heroes) {
             _this.heroes = heroes;
-            console.log(JSON.stringify(heroes));
         });
     };
     DashboardComponent.prototype.ngOnDestroy = function () {

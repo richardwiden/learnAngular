@@ -18,7 +18,6 @@ var HeroSearchService = (function () {
         this.searchUrl = '/heroes';
     }
     HeroSearchService.prototype.search = function (term) {
-        console.log(term);
         return this.af.database.list(this.searchUrl, {
             query: {
                 orderByChild: 'name_search',

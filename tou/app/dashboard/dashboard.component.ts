@@ -22,7 +22,6 @@ export class DashboardComponent implements OnInit,OnDestroy {
     ngOnInit(): void {
         this.subscription = this.heroService.getHeroes().subscribe(heroes=> {
             this.heroes = heroes;
-            console.log(JSON.stringify(heroes));
         })
     }
 
