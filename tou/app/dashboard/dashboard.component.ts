@@ -3,7 +3,6 @@ import {HeroService} from "../hero.service";
 import {Hero} from "../hero";
 import {Router} from "@angular/router";
 import '../rxjs-extensions'
-import {FirebaseListObservable} from 'angularfire2';
 import {Subscription} from "rxjs/Subscription";
 
 @Component({
@@ -32,7 +31,7 @@ export class DashboardComponent implements OnInit,OnDestroy {
     }
 
     gotoDetail(hero: Hero): void {
-        let link = ['/detail', hero.id];
+        let link = ['/detail', hero.$key];
         this.router.navigate(link);
     }
 }

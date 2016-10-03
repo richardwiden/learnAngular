@@ -28,7 +28,7 @@ var DashboardComponent = (function () {
         this.subscription.unsubscribe();
     };
     DashboardComponent.prototype.gotoDetail = function (hero) {
-        var link = ['/detail', hero.id];
+        var link = ['/detail', hero.$key];
         this.router.navigate(link);
     };
     DashboardComponent = __decorate([

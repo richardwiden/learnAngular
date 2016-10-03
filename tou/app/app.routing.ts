@@ -14,7 +14,7 @@ const appRoutes: Routes = [{
     path: 'dashboard',
     component: DashboardComponent
 }, {
-    path: 'detail/:id',
+    path: 'detail/:key',
     component: HeroDetailComponent
 }];
 export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);

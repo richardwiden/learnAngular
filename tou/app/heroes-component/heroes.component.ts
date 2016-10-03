@@ -2,7 +2,6 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Hero} from "../hero";
 import {HeroService} from "../hero.service";
 import {Router} from "@angular/router";
-import {FirebaseListObservable} from 'angularfire2';
 import {Subscription} from "rxjs/Subscription";
 
 @Component({
@@ -44,7 +43,7 @@ export class HeroesComponent implements OnInit,OnDestroy {
     }
 
     gotoDetail(): void {
-        this.router.navigate(['/detail', this.selectedHero.id]);
+        this.router.navigate(['/detail', this.selectedHero.$key]);
     }
 
     add(name: string) {

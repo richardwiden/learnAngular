@@ -18,8 +18,8 @@ export class HeroService {
         return this.af.database.list('/heroes');
     }
 
-    getHero(id: number): FirebaseObjectObservable<Hero> {
-        return this.af.database.object('/heroes/' + id);
+    getHero(key: string): FirebaseObjectObservable<Hero> {
+        return this.af.database.object('/heroes/' + key);
     }
 
     create(name: string): Promise<Hero> {
@@ -29,18 +29,20 @@ export class HeroService {
             .once('value');
     }
 
-    update(hero: Hero): Promise<Hero> {
-        const url = `${this.heroesUrl}/${hero.id}`;
-        return this.http.put(url, JSON.stringify(hero), {headers: this.headers}).toPromise()
-            .then(()=>hero)
-            .catch(HeroService.handleError);
+    update(hero: Hero): Promise<void> {
+        const url = `${this.heroesUrl}/${hero.$key}`;
+        delete(hero.$key);
+        let obj = JSON.parse(JSON.stringify(hero));
 
+        //noinspection TypeScriptValidateTypes
+        return this.af.database.object(url).update(obj);
     }
 
     delete(key: String): Promise<void> {
-        if(!key) return Promise.reject("Empty key");
+        if (!key) return Promise.reject("Empty key");
         const url = `${this.heroesUrl}/${key}`;
         console.log(url);
+        //noinspection TypeScriptUnresolvedFunction
         return this.af.database.object(url).remove()
             .then(()=>null)
             .catch((error)=> HeroService.handleError(error));

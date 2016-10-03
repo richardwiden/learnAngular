@@ -11,7 +11,7 @@
             (click)="onSelect(hero)"
             [class.selected]="hero === selectedHero">
         <span class="badge">{{hero.$key}}</span>
-        <span>{{hero.name}}</span>
+        <span class="text">{{hero.name}}</span>
         <button class="delete" (click)="delete(hero); $event.stopPropagation()">x</button>
     </li>
 </ul>

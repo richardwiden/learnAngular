@@ -36,7 +36,7 @@ var HeroesComponent = (function () {
         this.selectedHero = hero;
     };
     HeroesComponent.prototype.gotoDetail = function () {
-        this.router.navigate(['/detail', this.selectedHero.id]);
+        this.router.navigate(['/detail', this.selectedHero.$key]);
     };
     HeroesComponent.prototype.add = function (name) {
         var _this = this;

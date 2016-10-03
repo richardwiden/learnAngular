@@ -3,21 +3,24 @@ import {Hero} from "./hero";
 import {ActivatedRoute, Params} from "@angular/router";
 import {Location} from '@angular/common';
 import {HeroService} from "./hero.service";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
     selector: 'my-hero-detail',
     template: `
 <div *ngIf="hero">
     <h2>{{hero.name}} details!</h2>
-    <div><label>id: </label>{{hero.id}}</div>
+    <div><label>id: </label>{{hero.$key}}</div>
     <div>
         <label>name: </label>
         <input [(ngModel)]="hero.name" placeholder="name"/>
     </div>
+    <button (click)="save()">Save</button>
 </div>`
 })
 export class HeroDetailComponent implements OnInit {
     @Input() hero: Hero;
+    private subscription:Subscription;
 
     constructor(private heroService: HeroService,
                 private route: ActivatedRoute,
@@ -27,8 +30,8 @@ export class HeroDetailComponent implements OnInit {
 
     ngOnInit(): void {
         this.route.params.forEach((params: Params)=> {
-            let id: number = +params['id'];
-            //this.heroService.getHero(id).then((hero)=>this.hero = hero);
+            let key: string = params['key'];
+            this.subscription = this.heroService.getHero(key).subscribe((hero)=>this.hero = hero);
         });
     }
 
