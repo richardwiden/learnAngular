@@ -50,6 +50,10 @@
     height: 1.8em;
     margin-right: .8em;
     border-radius: 4px 0 0 4px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 30%;
 }
 
 button.delete {

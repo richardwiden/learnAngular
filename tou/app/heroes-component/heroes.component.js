@@ -19,9 +19,18 @@ var HeroesComponent = (function () {
     HeroesComponent.prototype.ngOnInit = function () {
         this.getHeroes();
     };
+    HeroesComponent.prototype.ngOnDestroy = function () {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+            this.subscription = null;
+        }
+    };
     HeroesComponent.prototype.getHeroes = function () {
         var _this = this;
-        this.heroService.getHeroes().then(function (heroes) { return _this.heroes = heroes; });
+        if (!this.subscription)
+            this.subscription = this.heroService.getHeroes().subscribe(function (heroes) {
+                _this.heroes = heroes;
+            });
     };
     HeroesComponent.prototype.onSelect = function (hero) {
         this.selectedHero = hero;
@@ -36,14 +45,13 @@ var HeroesComponent = (function () {
         name = name.trim();
         if (name == '')
             return;
-        this.heroService.create(name).then(function (hero) {
-            _this.heroes.push(hero);
+        this.heroService.create(name).then(function () {
             _this.selectedHero = null;
         });
     };
     HeroesComponent.prototype.delete = function (hero) {
         var _this = this;
-        this.heroService.delete(hero.id)
+        this.heroService.delete(hero.$key)
             .then(function () {
             _this.heroes = _this.heroes.filter(function (h) { return h !== hero; });
             if (_this.selectedHero === hero)

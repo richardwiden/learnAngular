@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Hero} from "../hero";
 import {HeroService} from "../hero.service";
 import {Router} from "@angular/router";
-
+import {FirebaseListObservable} from 'angularfire2';
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
     moduleId: module.id,
@@ -10,7 +11,10 @@ import {Router} from "@angular/router";
     templateUrl: 'heroes.component.html',
     styleUrls: ['heroes.component.css']
 })
-export class HeroesComponent implements OnInit {
+export class HeroesComponent implements OnInit,OnDestroy {
+    heroes: Hero[];
+    selectedHero: Hero;
+    subscription: Subscription;
 
     constructor(private heroService: HeroService,
                 private router: Router) {
@@ -20,12 +24,19 @@ export class HeroesComponent implements OnInit {
         this.getHeroes();
     }
 
+    ngOnDestroy(): void {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+            this.subscription = null;
+        }
+    }
 
-    heroes: Hero[];
-    selectedHero: Hero;
 
     getHeroes(): void {
-        this.heroService.getHeroes().then(heroes=>this.heroes = heroes);
+        if (!this.subscription)
+            this.subscription = this.heroService.getHeroes().subscribe(heroes=> {
+                this.heroes = heroes;
+            });
     }
 
     onSelect(hero: Hero): void {
@@ -40,14 +51,13 @@ export class HeroesComponent implements OnInit {
         if (!name) return;
         name = name.trim();
         if (name == '') return;
-        this.heroService.create(name).then(hero=> {
-            this.heroes.push(hero);
+        this.heroService.create(name).then(()=> {
             this.selectedHero = null;
         })
     }
 
     delete(hero: Hero) {
-        this.heroService.delete(hero.id)
+        this.heroService.delete(hero.$key)
             .then(()=> {
                 this.heroes = this.heroes.filter((h)=>h !== hero);
                 if (this.selectedHero === hero) this.selectedHero = null;

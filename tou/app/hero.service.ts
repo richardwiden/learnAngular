@@ -2,31 +2,31 @@ import {Injectable} from "@angular/core";
 import {Hero} from "./hero";
 import {Http, Headers} from "@angular/http";
 import 'rxjs/add/operator/toPromise';
+import {AngularFire, FirebaseListObservable, FirebaseObjectObservable} from 'angularfire2';
 
 @Injectable()
 export class HeroService {
-    private heroesUrl = 'app/heroes';
+    private heroesUrl = '/heroes';
     private headers = new Headers({'Content-Type': 'application/json'});
 
 
-    constructor(private http: Http) {
+    constructor(private http: Http,
+                private af: AngularFire) {
     }
 
-    getHeroes(): Promise<Hero[]> {
-        return this.http.get(this.heroesUrl).toPromise()
-            .then(response => response.json().data as Hero [])
-            .catch(HeroService.handleError);
+    getHeroes(): FirebaseListObservable<Hero[]> {
+        return this.af.database.list('/heroes');
     }
 
-    getHero(id: number): Promise<Hero> {
-        return this.getHeroes().then(heroes => heroes.find(hero => hero.id === id));
+    getHero(id: number): FirebaseObjectObservable<Hero> {
+        return this.af.database.object('/heroes/' + id);
     }
 
     create(name: string): Promise<Hero> {
-        return this.http
-            .post(this.heroesUrl, JSON.stringify({name: name}), {headers: this.headers}).toPromise()
-            .then(res=>res.json().data)
-            .catch(HeroService.handleError);
+        //noinspection TypeScriptUnresolvedFunction
+        return this.af.database.list('/heroes')
+            .push({name: name})
+            .once('value');
     }
 
     update(hero: Hero): Promise<Hero> {
@@ -37,11 +37,13 @@ export class HeroService {
 
     }
 
-    delete(id: number): Promise<void> {
-        const url = `${this.heroesUrl}/${id}`;
-        return this.http.delete(url, {headers: this.headers}).toPromise()
+    delete(key: String): Promise<void> {
+        if(!key) return Promise.reject("Empty key");
+        const url = `${this.heroesUrl}/${key}`;
+        console.log(url);
+        return this.af.database.object(url).remove()
             .then(()=>null)
-            .catch(HeroService.handleError);
+            .catch((error)=> HeroService.handleError(error));
     }
 
     private static handleError(error: any): Promise<any> {

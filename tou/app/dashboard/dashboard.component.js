@@ -19,7 +19,13 @@ var DashboardComponent = (function () {
     }
     DashboardComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.heroService.getHeroes().then(function (heroes) { return _this.heroes = heroes.slice(1, 5); });
+        this.subscription = this.heroService.getHeroes().subscribe(function (heroes) {
+            _this.heroes = heroes;
+            console.log(JSON.stringify(heroes));
+        });
+    };
+    DashboardComponent.prototype.ngOnDestroy = function () {
+        this.subscription.unsubscribe();
     };
     DashboardComponent.prototype.gotoDetail = function (hero) {
         var link = ['/detail', hero.id];
